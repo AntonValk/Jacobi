@@ -1,5 +1,5 @@
 //This method uses Fork/Join in order to create a parallelized version of the Jacobi Algorithm to solve Ax=B.
-//This is the tester class
+//This is the tester class, for large problems use the I/O class.
 
 package jacobi;
 import java.util.Arrays;
