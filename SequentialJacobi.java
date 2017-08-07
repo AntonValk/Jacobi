@@ -1,8 +1,9 @@
-package jacobi;
+//This class implements a sequential version of the Jacobi Algorithm for solving Ax=B
+//This is a tester class and uses the console for output for large problems use I/O class.
 
-public class arrayJacobi {
+public class SequentialJacobi {
 
-	public static double[] run_jacobi_method(double [][]A, double []b, double epsilon, int maxit){
+	public static double[] seqJac(double [][]A, double []b, double epsilon, int maxit){
 
 		int n = A.length;
 		double []x = new double[n];
@@ -33,42 +34,11 @@ public class arrayJacobi {
 		return x;
 	}
 
-	public static double[] oneJacobiIteration(double [][]A, double []b, double[] guess, int start, int stop){
-		
-		double []dx = new double[A.length];
-		double []y = new double[A.length];	
-		int i, j;	//temporary variables 
-
-		for(i = start; i < stop; i++)
-		{
-			dx[i] = b[i];
-			for(j = 0; j < A.length; j++)
-				dx[i] -= A[i][j]*guess[j];
-			dx[i] /= A[i][i];
-			y[i] += dx[i] + guess[i];
-		}
-		for(i = start; i < stop; i++) guess[i] = y[i];
-
-		return guess;
-	}
-	
 	
 
 	public static void main(String[] args){
-
-//		double a[][] = new double[][] {  
-//			{ 16.0, 1.0, -2.0 }, 
-//			{ 3.0, -5.0, 1.0 }, 
-//			{ 11.0, -2.0, 21.0 } 
-//		}; 
-//
-//		double b[] = new double[] { 4.6, 3.3, -38.9 }; 
-//		
-//		
-//		double[] x = run_jacobi_method(a, b, 0.0001, 6);
-//		for(int i = 0; i < x.length; i++) 
-//			System.out.println(x[i]);
 		
+		//fill in a random 10x10 sample problem
 		double c[][] = new double[10][10];
 		double d[] = new double[10];
 		for(int i = 0; i < c.length; i++)
@@ -84,7 +54,7 @@ public class arrayJacobi {
 		System.out.println("Now solving sequantially... ");
 		
 		long start_time = System.nanoTime();
-		double[] xVector = run_jacobi_method(c,d, 0.001, 500000000);
+		double[] xVector = seqJac(c,d, 0.0001, 15);
 
 		long stop_time = System.nanoTime(); 
 		long time_diff_millis = (stop_time - start_time)/(long)1.E6;
