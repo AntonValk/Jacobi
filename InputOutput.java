@@ -1,4 +1,6 @@
-
+//This class handles the I/O using la4j's I/O matrix market package.
+//To use this class you must download the la4j library 
+//and convert the Matrix and Vector objects to arrays of appropriate size and dimension.
 
 import org.la4j.Matrix;
 import org.la4j.Vector;
