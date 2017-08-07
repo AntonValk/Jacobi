@@ -1,3 +1,6 @@
+//This method uses Fork/Join in order to create a parallelized version of the Jacobi Algorithm to solve Ax=B.
+//This is the tester class
+
 package jacobi;
 import java.util.Arrays;
 import java.util.concurrent.ForkJoinPool;
@@ -22,6 +25,8 @@ public class ParJac extends RecursiveTask<double[]> {
 		this.stop = stop;
 	}
 
+	// if the size of the problem is more than threshold split the problem
+	// if not directly compute the solution
 	protected double[] compute()
 	{
 			if(start - stop <= SEQUENTIAL_THRESHOLD) {
@@ -33,30 +38,35 @@ public class ParJac extends RecursiveTask<double[]> {
 				int mid = (start + stop) / 2;
 				ParJac left = new ParJac(matrixA,column,solution,start,mid);
 				ParJac right = new ParJac(matrixA,column,solution,mid,stop);
-				left.fork();
+				left.fork(); //only split from the left to reduce the number of threads per level
 				right.compute();
 				left.join();
 				return solution;
 			}
 	}
 
+	// this method method applies the fork/join structure to the jacobi algorithm
+	// INPUT: Matrix A, Vector b, integer maxIt -> maximum number of iteration, double error -> radius of convergence
+	// OUTPUT: Solution vector
 	static double[] jacobi(double[][] matrix, double[] vector, int maxIt, double error){
-		assert (matrix.length == vector.length);
+		assert (matrix.length == vector.length); //check problem size
 		int numIt = 0;
 		int numConverged = 0;
-		double[] ans = new double[vector.length];
-		double[] previousAns = new double[vector.length];
+		double[] ans = new double[vector.length]; //current guess vector
+		double[] previousAns = new double[vector.length]; //previous guess vector
 		
 		while (numIt < maxIt){
 			numIt++;
 			numConverged = 0;
-			previousAns = Arrays.copyOfRange(ans, 0, ans.length);
+			previousAns = Arrays.copyOfRange(ans, 0, ans.length);// copy current guess to previous guess
+			//update the current guess
 			ans = Arrays.copyOfRange(ForkJoinPool.commonPool().invoke(new ParJac(matrix, vector, ans, 0, vector.length)), 0, vector.length);
+			//check how many of the elements of the vector have converged
 			for(int i = 0; i < vector.length; i++)
 				if(Math.abs(ans[i] - previousAns[i]) <= error){
 					numConverged++;
 				}
-
+			//if all the elements of the vector have converged exit the loop
 			if(numConverged == ans.length){
 				System.out.println("Convergence reached at iteration number: " + numIt);
 				break;
@@ -69,7 +79,7 @@ public class ParJac extends RecursiveTask<double[]> {
 		return ans;
 	}
 
-
+	// Does one iteration of the Jacobi Algorithm over a range of rows (between start and stop)
 	public static double[] oneJacobiIteration(double [][]A, double []b, double[] guess, int start, int stop){
 
 		double []dx = new double[A.length];
@@ -89,6 +99,7 @@ public class ParJac extends RecursiveTask<double[]> {
 		return guess;
 	}
 	
+	//Helper method used to check if the answer is right. Input A,x should yield an output approximately equalt to vector B.
 	public static double[] multiply(double[][] a, double[] x) {
         int m = a.length; 				//horizontal length of A
         int n = a[0].length; 			//vertical length of A
@@ -107,6 +118,7 @@ public class ParJac extends RecursiveTask<double[]> {
     }
 
 
+	//Main method used to test cases
 	public static void main(String args[]){		
 		
 		double c[][] = new double[1000][1000];
@@ -125,6 +137,9 @@ public class ParJac extends RecursiveTask<double[]> {
 		
 		long start_time = System.nanoTime();
 		double[] xVector = jacobi(c, d, 20, 0.00001);
+
+		//For small problems size <= 10 use the print command to check if the answer converged
+		//For larger problems handle using I/O class
 		
 //		System.out.println(Arrays.deepToString(c));;
 //
