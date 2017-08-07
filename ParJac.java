@@ -99,11 +99,11 @@ public class ParJac extends RecursiveTask<double[]> {
 		return guess;
 	}
 	
-	//Helper method used to check if the answer is right. Input A,x should yield an output approximately equalt to vector B.
+	//Helper method used to check if the answer is right. Input A,x should yield an output approximately equal to vector B.
 	public static double[] multiply(double[][] a, double[] x) {
         int m = a.length; 				//horizontal length of A
-        int n = a[0].length; 			//vertical length of A
-        if (x.length != m){ 			//check if the horizontal length of A is incompatible with the length of the vector
+        int n = a[0].length; 	//vertical length of A
+        if (x.length != m){ 	//check if the horizontal length of A is incompatible with the length of the vector
         System.out.println("Matrix dimensions error.");
         return x; 
         }
