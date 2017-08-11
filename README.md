@@ -6,3 +6,7 @@ The two tester methods can be used to test the code on simple small size problem
 For bigger size problems use the Input/Output class that is built on la4j's I/O library.
 
 Author: Antonios Valkanas
+
+#TO DO:
+1) Sparse Matrix Imnplementation to save memory.
+2) Cache Management Strategy to improve speed.
