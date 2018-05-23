@@ -8,5 +8,5 @@ For bigger size problems use the Input/Output class that is built on la4j's I/O 
 Author: Antonios Valkanas
 
 ## TO DO:
-1) Sparse Matrix Implementation to save memory. ###DONE
+1) Sparse Matrix Implementation to save memory. ### DONE
 2) Cache Management Strategy to improve speed.
